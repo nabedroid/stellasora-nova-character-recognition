@@ -1,0 +1,406 @@
+{
+  "version": "7.2.0",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "s",
+      "points": [
+        [
+          46.93870197951752,
+          21.458977412923854
+        ],
+        [
+          97.24210917256104,
+          56.4965896392546
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "o",
+      "points": [
+        [
+          88.28664491935628,
+          21.66571712762305
+        ],
+        [
+          119.98347778947235,
+          56.289849924555405
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "r",
+      "points": [
+        [
+          111.441492965666,
+          16.083744830744823
+        ],
+        [
+          166.70665331149013,
+          56.083110209856216
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "a",
+      "points": [
+        [
+          150.30855932911442,
+          22.079196557021444
+        ],
+        [
+          186.34692620791355,
+          56.4965896392546
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "h",
+      "points": [
+        [
+          77.32944004029902,
+          45.64752403272952
+        ],
+        [
+          119.15651893067559,
+          99.08497086728852
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "a",
+      "points": [
+        [
+          114.7493284008531,
+          65.08105721445375
+        ],
+        [
+          150.78769527965224,
+          99.4984502966869
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "n",
+      "points": [
+        [
+          145.34680617633376,
+          64.66757778505536
+        ],
+        [
+          188.0008439255071,
+          98.87823115258932
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "a",
+      "points": [
+        [
+          183.80039311038382,
+          64.66757778505537
+        ],
+        [
+          219.83875998918296,
+          99.08497086728852
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "u",
+      "points": [
+        [
+          25.231031936102184,
+          94.85157613113763
+        ],
+        [
+          63.750275391291666,
+          130.09592807216757
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "t",
+      "points": [
+        [
+          60.5835231496643,
+          83.48089182268197
+        ],
+        [
+          80.28945256722716,
+          129.68244864276917
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "a",
+      "points": [
+        [
+          79.81031661668936,
+          95.67853498993443
+        ],
+        [
+          115.8486834954885,
+          130.09592807216782
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "W",
+      "points": [
+        [
+          132.5371260789465,
+          116.68848901754633
+        ],
+        [
+          139.5972785782405,
+          124.17225066679796
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "E",
+      "points": [
+        [
+          139.5972785782405,
+          116.9708951175181
+        ],
+        [
+          146.65743107753448,
+          124.45465676676973
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "M",
+      "points": [
+        [
+          150.32871037716737,
+          117.39450426747572
+        ],
+        [
+          157.38886287646136,
+          124.87826591672736
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "E",
+      "points": [
+        [
+          157.9536750764049,
+          117.11209816750397
+        ],
+        [
+          165.01382757569888,
+          124.59585981675552
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "T",
+      "points": [
+        [
+          164.1666092757836,
+          116.68848901754633
+        ],
+        [
+          170.8031526251199,
+          124.03104761681207
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "B",
+      "points": [
+        [
+          174.19202582478107,
+          116.97089511751808
+        ],
+        [
+          180.68736612413147,
+          124.31345371678384
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "E",
+      "points": [
+        [
+          181.11097527408916,
+          117.39450426747574
+        ],
+        [
+          188.312330823369,
+          124.5958598167556
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "F",
+      "points": [
+        [
+          188.31233082336902,
+          116.68848901754635
+        ],
+        [
+          194.80767112271946,
+          124.5958598167556
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "O",
+      "points": [
+        [
+          194.24285892277598,
+          116.68848901754635
+        ],
+        [
+          201.30301142206991,
+          124.31345371678384
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "R",
+      "points": [
+        [
+          199.89098092221118,
+          116.9708951175181
+        ],
+        [
+          206.80993037151921,
+          124.31345371678384
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "E",
+      "points": [
+        [
+          207.09233647149102,
+          117.11209816750397
+        ],
+        [
+          214.29369202077086,
+          124.31345371678384
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "outfit_4002.png",
+  "imageData": null,
+  "imageHeight": 512,
+  "imageWidth": 512
+}

@@ -1,0 +1,82 @@
+{
+  "version": "7.2.0",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "M",
+      "points": [
+        [
+          24.72330326440894,
+          26.601561240426882
+        ],
+        [
+          108.28597526841193,
+          93.65184895621371
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "E",
+      "points": [
+        [
+          36.23193473801413,
+          94.90278715986646
+        ],
+        [
+          76.01176961417124,
+          135.93356023967632
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "W",
+      "points": [
+        [
+          49.74206733746374,
+          156.44894677958126
+        ],
+        [
+          82.26646063243496,
+          187.9725895116303
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    },
+    {
+      "label": "G",
+      "points": [
+        [
+          77.7630830992851,
+          240.2618064243148
+        ],
+        [
+          125.29873483808919,
+          284.29483119289125
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "rectangle",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "outfit_4001.png",
+  "imageData": null,
+  "imageHeight": 512,
+  "imageWidth": 512
+}
