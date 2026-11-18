@@ -31,7 +31,7 @@ def pad_to_square(img):
   # 縦横比を保って正方形に寄せる (余白は画像の平均色で埋める)
   w, h = img.size
   side = max(w, h)
-  avg = img.resize((1, 1)).getpixel()
+  avg = img.resize((1, 1)).getpixel((0, 0))
   canvas = Image.new('RGB', (side, side), avg)
   canvas.paste(img, ((side - w) // 2, (side - h) // 2))
   return canvas
