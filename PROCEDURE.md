@@ -106,9 +106,20 @@ docker compose run --rm ml python src/train.py --data /workspace/data/dataset_s2
 - 悪化したクラスがあれば、そのクラスだけ合成を外す（floor の調整や対象クラスの見直し）
 - per_class.csv と一緒に出る「混同の多いペア」上位を見て、実害のある混同かどうかを判断する
 
-## 9. 今回の範囲外（次フェーズ）
+## 9. 推論とプロット (predict)
+
+学習済みモデルで画像を推論し、プロット画像と predictions.csv を出す。
+
+```powershell
+docker compose run --rm ml python src/predict.py --model /workspace/runs/stage2/model.pt --json /workspace/data/labelme/images --out /workspace/runs/stage2/plots
+```
+
+- `--json` は json ファイル単体でも、フォルダ（中の全 json を処理）でもよい。画像は json の imagePath から引く
+- プロットは「元画像に色付きの箱＋予測文字」。色は緑＝正解、赤＝不一致、橙＝信頼度不足。信頼度はプロットに出さず、predictions.csv にのみ残す
+- 信頼度が `--threshold`（デフォルト 0.5）未満の予測は「?」として出す
+
+## 10. 今回の範囲外（次フェーズ）
 
 - 文字候補の検出モデル（1クラス検出）
-- 推論とプロット出力（文字＋座標＋信頼度、分類不能は「？」）
 - reject の扱い（当面は分類器の信頼度に対する閾値で代用する想定）
 - ONNX 化と実行環境への組み込み
