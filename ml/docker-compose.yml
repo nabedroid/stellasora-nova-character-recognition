@@ -1,0 +1,16 @@
+services:
+  ml:
+    build: .
+    image: stella-ocr-ml
+    working_dir: /workspace
+    volumes:
+      - ../data:/workspace/data
+      - ./src:/workspace/src
+      - ./runs:/workspace/runs
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

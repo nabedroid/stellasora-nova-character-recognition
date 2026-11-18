@@ -3,3 +3,9 @@ python-3.13.15-embed-amd64/
 *.jpg
 *.jpeg
 *.webp
+data/converted/
+data/dataset_s1/
+data/dataset_s2/
+ml/runs/
+*.ttf
+*.woff2
