@@ -13,6 +13,16 @@ CLASSES = [chr(c) for c in range(ord('A'), ord('Z') + 1)] + \
           [chr(c) for c in range(ord('a'), ord('z') + 1)] + \
           [chr(c) for c in range(ord('0'), ord('9') + 1)]
 
+def label_dirname(label):
+  # Windows はフォルダ名の大文字小文字を区別しないため、
+  # A と a が同じフォルダに混ざらない名前を使う (upper_A / lower_a / digit_5)
+  if label.isupper():
+    return f'upper_{label}'
+  if label.islower():
+    return f'lower_{label}'
+  return f'digit_{label}'
+
+
 # テストに回す元画像。同じ画像のグリフが train/test の両方に入らないよう、
 # グリフ単位ではなくファイル単位で分ける
 TEST_FILES = ['outfit_1003', 'outfit_1005', 'outfit_2007', 'outfit_3005',
@@ -51,13 +61,13 @@ def main():
   test_counts = {c: 0 for c in CLASSES}
 
   for label in CLASSES:
-    src_dir = crops / label
+    src_dir = crops / label_dirname(label)
     if not src_dir.exists():
       continue
     for png in sorted(src_dir.glob('*.png')):
       stem = png.name.rsplit('_', 1)[0]
       split = 'test' if stem in TEST_FILES else 'train'
-      dst = out / split / label
+      dst = out / split / label_dirname(label)
       dst.mkdir(parents=True, exist_ok=True)
       shutil.copy(png, dst / png.name)
       if split == 'train':
@@ -72,7 +82,7 @@ def main():
       need = args.floor - train_counts[label]
       if need <= 0:
         continue
-      dst = out / 'train' / label
+      dst = out / 'train' / label_dirname(label)
       dst.mkdir(parents=True, exist_ok=True)
       for i in range(need):
         render_glyph(args.font, label, rng).save(dst / f'synth_{i:03d}.png')

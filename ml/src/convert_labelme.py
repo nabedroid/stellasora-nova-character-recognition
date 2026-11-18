@@ -1,6 +1,6 @@
 # labelme形式のアノテーション(矩形 + 1文字ラベル)を2形式に変換する
 #   1) YOLO検出形式: yolo/<画像名>.txt (class cx cy w h, 0-1に正規化)
-#   2) 分類器用crop: crops/<ラベル>/<画像名>_<連番>.png
+#   2) 分類器用crop: crops/<upper_A等のフォルダ>/<画像名>_<連番>.png
 # あわせて文字ごとの件数を集計して表示する
 # 使い方: python convert_labelme.py <入力フォルダ> <出力フォルダ> [pad率=0.1]
 #   入力フォルダには .json と対応する画像が同居している前提
@@ -14,6 +14,16 @@ CLASSES = [chr(c) for c in range(ord('A'), ord('Z') + 1)] + \
           [chr(c) for c in range(ord('a'), ord('z') + 1)] + \
           [chr(c) for c in range(ord('0'), ord('9') + 1)]
 CLASS_ID = {c: i for i, c in enumerate(CLASSES)}
+
+
+def label_dirname(label):
+  # Windows はフォルダ名の大文字小文字を区別しないため、
+  # A と a が同じフォルダに混ざらない名前を使う (upper_A / lower_a / digit_5)
+  if label.isupper():
+    return f'upper_{label}'
+  if label.islower():
+    return f'lower_{label}'
+  return f'digit_{label}'
 
 
 def load_items(json_path):
@@ -58,7 +68,7 @@ def main():
       ph = (it['y2'] - it['y1']) * pad
       box = (max(0, int(it['x1'] - pw)), max(0, int(it['y1'] - ph)),
              min(w, int(it['x2'] + pw)), min(h, int(it['y2'] + ph)))
-      label_dir = crop_dir / label
+      label_dir = crop_dir / label_dirname(label)
       label_dir.mkdir(exist_ok=True)
       img.crop(box).save(label_dir / f"{json_path.stem}_{i:02d}.png")
       # YOLO行(クラスIDが固定表にある場合のみ)

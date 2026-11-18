@@ -17,6 +17,16 @@ CLASSES = [chr(c) for c in range(ord('A'), ord('Z') + 1)] + \
 IMG = 48
 
 
+def label_dirname(label):
+  # Windows はフォルダ名の大文字小文字を区別しないため、
+  # A と a が同じフォルダに混ざらない名前を使う (upper_A / lower_a / digit_5)
+  if label.isupper():
+    return f'upper_{label}'
+  if label.islower():
+    return f'lower_{label}'
+  return f'digit_{label}'
+
+
 def pad_to_square(img):
   # 縦横比を保って正方形に寄せる (余白は画像の平均色で埋める)
   w, h = img.size
@@ -32,7 +42,7 @@ class GlyphDataset(Dataset):
     self.items = []
     root = Path(root)
     for ci, label in enumerate(CLASSES):
-      label_dir = root / label
+      label_dir = root / label_dirname(label)
       if not label_dir.exists():
         continue
       for png in sorted(label_dir.glob('*.png')):

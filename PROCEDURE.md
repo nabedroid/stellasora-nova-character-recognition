@@ -58,7 +58,9 @@ labelme JSON（とローカルの PNG）から、文字ごとの crop と件数�
 docker compose run --rm ml python src/convert_labelme.py /workspace/data/labelme/images /workspace/data/converted
 ```
 
-出力の `crops/<ラベル>/` が以降の入力になる。件数表で欠けている文字を確認する。
+出力の `crops/` が以降の入力になる。件数表で欠けている文字を確認する。
+なお crop のフォルダ名は `upper_A` / `lower_a` / `digit_5` の形式にする
+（Windows はフォルダ名の大文字小文字を区別しないため、A と a を素のラベル名で分けると同じフォルダに混ざってしまう）。
 
 ## 4. データセット構築 (stage1: 実データのみ)
 
