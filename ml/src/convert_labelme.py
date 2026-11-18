@@ -9,9 +9,10 @@ import sys
 from pathlib import Path
 from PIL import Image
 
-# クラスIDは A-Z a-z の固定順にする(どのファイルでも同じIDになるように)
+# クラスIDは A-Z a-z 0-9 の固定順にする(どのファイルでも同じIDになるように)
 CLASSES = [chr(c) for c in range(ord('A'), ord('Z') + 1)] + \
-          [chr(c) for c in range(ord('a'), ord('z') + 1)]
+          [chr(c) for c in range(ord('a'), ord('z') + 1)] + \
+          [chr(c) for c in range(ord('0'), ord('9') + 1)]
 CLASS_ID = {c: i for i, c in enumerate(CLASSES)}
 
 
@@ -80,7 +81,7 @@ def main():
   missing = [c for c in CLASSES if c not in counts]
   print(f"データに無い文字({len(missing)}種): {' '.join(missing)}")
   if unknown:
-    print(f"警告: A-Za-z以外のラベル: {sorted(unknown)}")
+    print(f"警告: A-Za-z0-9以外のラベル: {sorted(unknown)}")
 
 
 if __name__ == '__main__':
