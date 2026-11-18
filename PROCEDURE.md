@@ -2,7 +2,7 @@
 
 グリフ分類器（62クラス）の学習に到達するまでの手順。
 設計前提：実データ主体、合成は実例の少ないクラスの底上げのみ。
-テスト分割は元画像ファイル単位（同じ画像のグリフを train/test に混ぜない）。
+val 分割は元画像ファイル単位（同じ画像のグリフを train/val に混ぜない）。
 
 想定レイアウト（リポジトリ stellasora-nova-character-recognition）：
 
@@ -64,8 +64,9 @@ docker compose run --rm ml python src/convert_labelme.py /workspace/data/labelme
 
 ## 4. データセット構築 (stage1: 実データのみ)
 
-crop を train/test にファイル単位で分割する。テストに回す元画像は
-build_dataset.py の TEST_FILES（outfit_1003, 1005, 2007, 3005, 3012, 3021, 4018、計204グリフ）に固定してある。
+crop を train/val にファイル単位で分割する。val に回す元画像は
+build_dataset.py の VAL_FILES（outfit_1003, 1005, 2007, 3005, 3012, 3021, 4018、計204グリフ）に固定してある。
+この val は開発中の評価用で、最終確認用の test は未アノテーションの画像を将来アノテーションして別途用意する。
 
 ```powershell
 docker compose run --rm ml python src/build_dataset.py --crops /workspace/data/converted/crops --font /workspace/data/font/NovaModern.ttf --out /workspace/data/dataset_s1 --no-synthetic

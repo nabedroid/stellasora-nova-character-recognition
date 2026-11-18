@@ -1,4 +1,4 @@
-# データセット構築: crop を元画像ファイル単位で train/test に分け、
+# データセット構築: crop を元画像ファイル単位で train/val に分け、
 # 実例の少ないクラスだけフォント合成で底上げする
 # 使い方: python src/build_dataset.py --crops <cropフォルダ> --font <TTFパス> --out <出力先>
 #   --floor 24        合成で底上げする下限 (実例がこれ未満のクラスだけ補う)
@@ -23,10 +23,10 @@ def label_dirname(label):
   return f'digit_{label}'
 
 
-# テストに回す元画像。同じ画像のグリフが train/test の両方に入らないよう、
+# val (評価用) に回す元画像。同じ画像のグリフが train/val の両方に入らないよう、
 # グリフ単位ではなくファイル単位で分ける
-TEST_FILES = ['outfit_1003', 'outfit_1005', 'outfit_2007', 'outfit_3005',
-              'outfit_3012', 'outfit_3021', 'outfit_4018']
+VAL_FILES = ['outfit_1003', 'outfit_1005', 'outfit_2007', 'outfit_3005',
+             'outfit_3012', 'outfit_3021', 'outfit_4018']
 
 # 合成の配色 (文字色, 背景色)。コントラストのはっきりした組み合わせだけを使う
 PALETTES = [('#111111', '#ffffff'), ('#ffffff', '#111111'),
@@ -58,7 +58,7 @@ def main():
   out = Path(args.out)
   rng = random.Random(42)
   train_counts = {c: 0 for c in CLASSES}
-  test_counts = {c: 0 for c in CLASSES}
+  val_counts = {c: 0 for c in CLASSES}
 
   for label in CLASSES:
     src_dir = crops / label_dirname(label)
@@ -66,14 +66,14 @@ def main():
       continue
     for png in sorted(src_dir.glob('*.png')):
       stem = png.name.rsplit('_', 1)[0]
-      split = 'test' if stem in TEST_FILES else 'train'
+      split = 'val' if stem in VAL_FILES else 'train'
       dst = out / split / label_dirname(label)
       dst.mkdir(parents=True, exist_ok=True)
       shutil.copy(png, dst / png.name)
       if split == 'train':
         train_counts[label] += 1
       else:
-        test_counts[label] += 1
+        val_counts[label] += 1
 
   # 合成で底上げ (train の実例が floor 未満のクラスだけ)
   topped = {}
@@ -89,10 +89,10 @@ def main():
       topped[label] = need
 
   print(f"train: {sum(train_counts.values())} (+合成 {sum(topped.values())}), "
-        f"test: {sum(test_counts.values())}")
+        f"val: {sum(val_counts.values())}")
   print('底上げしたクラス:', topped)
-  zero_test = [c for c in CLASSES if test_counts[c] == 0]
-  print('テストに無いクラス:', ' '.join(zero_test))
+  zero_val = [c for c in CLASSES if val_counts[c] == 0]
+  print('val に無いクラス:', ' '.join(zero_val))
 
 
 if __name__ == '__main__':

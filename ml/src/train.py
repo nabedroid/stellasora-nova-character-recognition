@@ -122,10 +122,10 @@ def main():
   print('device:', device)
   data = Path(args.data)
   train_ds = GlyphDataset(data / 'train', train=True)
-  test_ds = GlyphDataset(data / 'test')
-  print(f'train: {len(train_ds)}, test: {len(test_ds)}')
+  val_ds = GlyphDataset(data / 'val')
+  print(f'train: {len(train_ds)}, val: {len(val_ds)}')
   train_loader = DataLoader(train_ds, batch_size=args.batch, shuffle=True, num_workers=2)
-  test_loader = DataLoader(test_ds, batch_size=args.batch)
+  val_loader = DataLoader(val_ds, batch_size=args.batch)
 
   model = GlyphNet().to(device)
   opt = torch.optim.AdamW(model.parameters(), lr=args.lr, weight_decay=1e-4)
@@ -153,10 +153,10 @@ def main():
   out_dir.mkdir(parents=True, exist_ok=True)
   torch.save(model.state_dict(), out_dir / 'model.pt')
 
-  correct, total, confusion = evaluate(model, test_loader, device)
+  correct, total, confusion = evaluate(model, val_loader, device)
   tot = sum(total.values())
   cor = sum(correct.values())
-  print(f'test acc: {cor}/{tot} = {cor / tot:.4f}' if tot else 'test: データなし')
+  print(f'val acc: {cor}/{tot} = {cor / tot:.4f}' if tot else 'val: データなし')
   with open(out_dir / 'per_class.csv', 'w', newline='', encoding='utf-8') as f:
     w = csv.writer(f)
     w.writerow(['label', 'correct', 'total', 'acc'])
