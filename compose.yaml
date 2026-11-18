@@ -1,0 +1,18 @@
+services:
+  ml:
+    build:
+      context: ./ml
+      dockerfile: Dockerfile
+    image: stella-ocr-ml
+    working_dir: /workspace
+    volumes:
+      - ./data:/workspace/data
+      - ./ml/src:/workspace/src
+      - ./ml/runs:/workspace/runs
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]

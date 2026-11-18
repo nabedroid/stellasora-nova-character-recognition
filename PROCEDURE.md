@@ -7,6 +7,7 @@
 想定レイアウト（リポジトリ stellasora-nova-character-recognition）：
 
 ```
+compose.yaml           Docker Compose 定義 (プロジェクトルートに集約)
 data/
   labelme/images/      labelme JSON (PNG はローカルのみ、gitignore 済み)
   converted/           変換出力 (crops) ※ローカルのみ
@@ -15,7 +16,6 @@ data/
   font/NovaModern.ttf  ブロック体フォント ※ローカルのみ
 ml/
   Dockerfile
-  docker-compose.yml
   src/ (convert_labelme.py, build_dataset.py, train.py)
   runs/                学習結果 ※ローカルのみ (per_class.csv は共有可)
 ```
@@ -36,10 +36,10 @@ ml/runs/
 
 ## 2. Docker イメージのビルド
 
-ml フォルダでビルドする。学習は GPU 前提（RTX 2070 SUPER）。
+プロジェクトルートでビルドする。以降のコマンドはすべてプロジェクトルートで実行する。
+学習は GPU 前提（RTX 2070 SUPER）。
 
 ```powershell
-cd ml
 docker compose build
 ```
 
