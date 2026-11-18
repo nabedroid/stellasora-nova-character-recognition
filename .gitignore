@@ -9,3 +9,5 @@ data/dataset_s2/
 ml/runs/
 *.ttf
 *.woff2
+__pycache__/
+*.py[cod]
