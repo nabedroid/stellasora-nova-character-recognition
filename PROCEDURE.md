@@ -174,8 +174,20 @@ docker compose run --rm ml python src/predict_detector.py --weights /workspace/r
 - 画像は2倍に拡大して `<元名>_plot.png` を出力する
 - `--images` は画像フォルダでも画像1枚でもよい。`--conf` のデフォルトは 0.25
 
-## 15. 今回の範囲外（次フェーズ）
+## 15. 検出 + 分類 (predict_full)
 
-- predict への検出器の接続（画像だけで推論する形）
-- reject の扱い（当面は分類器の信頼度に対する閾値で代用する想定）
+検出器と分類器を組み合わせた完成形。画像だけで「文字 + 座標 + 信頼度」を出す。
+
+```powershell
+docker compose run --rm ml python src/predict_full.py --detector /workspace/runs/detector/weights/best.pt --classifier /workspace/runs/stage2/model.pt --images /workspace/data/labelme/images --out /workspace/data/predict_full
+```
+
+- 検出 (conf 0.25) → 箱を読み順（上→下、左→右）に並べ替え → 学習時と同じ条件で切り出して分類（信頼度 0.5 未満は「?」）
+- プロットは predict と同じ「箱 + 予測文字チップ」。色は緑 = 文字が付いた、橙 = ? の2色（正解との一致は見ていない）
+- `predictions.csv` に pred・分類の信頼度・検出の信頼度・座標を出す
+- 検出箱のズレで読みが崩れる場合は `--expand` で切り出しの余白を広げられる（デフォルト 0 = 追加拡大なし）
+
+## 16. 今回の範囲外（次フェーズ）
+
+- reject の本格化（現状は分類器の信頼度に対する閾値で代用）
 - ONNX 化と実行環境への組み込み
