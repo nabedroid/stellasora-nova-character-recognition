@@ -5,6 +5,7 @@
 #   --model yolo11n.pt  ベースモデル (初回実行時に自動でダウンロードされる)
 #   --epochs 100        エポック数
 #   --imgsz 640         入力サイズ (元画像は 512 なので少し拡大)
+#   --batch 16          バッチサイズ (VRAM が足りない場合は 8 や 4 に下げる)
 # 出力: /workspace/runs/<name>/weights/best.pt (実際の保存先は終了時に表示する)
 import argparse
 from pathlib import Path
@@ -22,10 +23,12 @@ def main():
   ap.add_argument('--model', default='yolo11n.pt')
   ap.add_argument('--epochs', type=int, default=100)
   ap.add_argument('--imgsz', type=int, default=640)
+  ap.add_argument('--batch', type=int, default=16)
   args = ap.parse_args()
 
   model = YOLO(args.model)
   results = model.train(data=args.data, epochs=args.epochs, imgsz=args.imgsz,
+                        batch=args.batch,
                         project=str(RUNS_DIR), name=args.name)
   print('保存先:', results.save_dir)
   print('best.pt:', results.save_dir / 'weights' / 'best.pt')
