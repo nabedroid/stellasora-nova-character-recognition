@@ -6,6 +6,8 @@ python-3.13.15-embed-amd64/
 data/converted/
 data/dataset_s1/
 data/dataset_s2/
+data/yolo_1class/
+data/detector/
 ml/runs/
 *.ttf
 *.woff2

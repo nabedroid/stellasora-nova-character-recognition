@@ -13,6 +13,8 @@ data/
   converted/           変換出力 (crops) ※ローカルのみ
   dataset_s1/          stage1 用データセット ※ローカルのみ
   dataset_s2/          stage2 用データセット ※ローカルのみ
+  yolo_1class/         1クラス化した YOLO ラベル ※ローカルのみ
+  detector/            検出用データセット ※ローカルのみ
   font/NovaModern.ttf  ブロック体フォント ※ローカルのみ
 ml/
   Dockerfile
@@ -119,8 +121,49 @@ docker compose run --rm ml python src/predict.py --model /workspace/runs/stage2/
 - プロットは「元画像に色付きの箱＋予測文字」。色は緑＝正解、赤＝不一致、橙＝信頼度不足。信頼度はプロットに出さず、predictions.csv にのみ残す
 - 信頼度が `--threshold`（デフォルト 0.5）未満の予測は「?」として出す
 
-## 10. 今回の範囲外（次フェーズ）
+## 10. 1クラス化 (yolo_to_1class)
 
-- 文字候補の検出モデル（1クラス検出）
+検出器は「どの文字か」を捨てて「文字がある場所」だけを学習する。
+convert_labelme.py が出した62クラスの YOLO ラベルを1クラスに変換する。
+なお以降の手順では ultralytics を使うため、最初にイメージの再ビルドが要る。
+
+```powershell
+docker compose build
+docker compose run --rm ml python src/yolo_to_1class.py /workspace/data/converted/yolo /workspace/data/yolo_1class
+```
+
+## 11. 検出用データセット構築
+
+画像と1クラスのラベルを、分類器と同じ VAL_FILES で train/val に分けて
+YOLO 学習用レイアウト（images/labels + data.yaml）に配置する。
+
+```powershell
+docker compose run --rm ml python src/build_detector_dataset.py --images /workspace/data/labelme/images --labels /workspace/data/yolo_1class --out /workspace/data/detector
+```
+
+## 12. 検出器の学習
+
+```powershell
+docker compose run --rm ml python src/train_detector.py --data /workspace/data/detector/data.yaml --name detector
+```
+
+- ベースモデル yolo11n.pt は初回実行時に自動でダウンロードされる
+- 結果は runs/detector/weights/best.pt（実際の保存先は終了時に表示される）
+
+## 13. 検出の評価 (位置の再現率)
+
+分類の正しさではなく「正解箱の位置に検出箱が当たっているか」だけを測る。
+
+```powershell
+docker compose run --rm ml python src/evaluate_detector.py --weights /workspace/runs/detector/weights/best.pt --images /workspace/data/labelme/images
+```
+
+- デフォルトは val の7ファイルが対象（--all で全ファイル）
+- IoU>=0.5 の再現率と、緩い基準（中心ヒット）の再現率、サイズ帯別・ファイル別内訳、余分な検出箱の数を出す
+- 過検出は分類器側で落とす前提なので、まず見るのは再現率
+
+## 14. 今回の範囲外（次フェーズ）
+
+- predict への検出器の接続（画像だけで推論する形）
 - reject の扱い（当面は分類器の信頼度に対する閾値で代用する想定）
 - ONNX 化と実行環境への組み込み
