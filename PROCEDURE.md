@@ -162,7 +162,19 @@ docker compose run --rm ml python src/evaluate_detector.py --weights /workspace/
 - IoU>=0.5 の再現率と、緩い基準（中心ヒット）の再現率、サイズ帯別・ファイル別内訳、余分な検出箱の数を出す
 - 過検出は分類器側で落とす前提なので、まず見るのは再現率
 
-## 14. 今回の範囲外（次フェーズ）
+## 14. 検出のプロット (predict_detector)
+
+検出器だけで画像に枠を描く。labelme は不要なので、未アノテーションの画像にも使える。
+
+```powershell
+docker compose run --rm ml python src/predict_detector.py --weights /workspace/runs/detector/weights/best.pt --images /workspace/data/labelme/images --out /workspace/data/predict_detector
+```
+
+- クラスも信頼度の数値も描かない。信頼度は枠の色で表す（しきい値ちょうど = 赤 → 黄 → 1.0 = 緑のグラデーション）
+- 画像は2倍に拡大して `<元名>_plot.png` を出力する
+- `--images` は画像フォルダでも画像1枚でもよい。`--conf` のデフォルトは 0.25
+
+## 15. 今回の範囲外（次フェーズ）
 
 - predict への検出器の接続（画像だけで推論する形）
 - reject の扱い（当面は分類器の信頼度に対する閾値で代用する想定）
