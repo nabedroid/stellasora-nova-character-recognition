@@ -5,6 +5,7 @@ services:
       dockerfile: Dockerfile
     image: stella-ocr-ml
     working_dir: /workspace
+    shm_size: '8gb'
     volumes:
       - ./data:/workspace/data
       - ./ml/src:/workspace/src
