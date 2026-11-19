@@ -25,7 +25,13 @@ def main():
   args = ap.parse_args()
 
   model = YOLO(args.model)
+  # 拡張 (augmentation) は ultralytics 既定のうち文字と相性の悪いものを切る:
+  #   fliplr  左右反転は字形が別物になるので切る (既定 0.5)
+  #   mosaic  4枚合成で小さいグリフがさらに縮むので切る (既定 1.0)
+  #   scale   拡縮の下限を浅くする (既定 0.5 = 0.5〜1.5倍 → 0.2 = 0.8〜1.2倍)
+  #   degrees 斜め書きの実例があるので、回転を ±15° だけ入れる (既定 0.0)
   results = model.train(data=args.data, epochs=args.epochs, imgsz=args.imgsz,
+                        fliplr=0.0, mosaic=0.0, scale=0.2, degrees=15.0,
                         project=str(RUNS_DIR), name=args.name)
   print('保存先:', results.save_dir)
   print('best.pt:', results.save_dir / 'weights' / 'best.pt')
