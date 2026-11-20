@@ -3,6 +3,9 @@
 # 物差しは evaluate_yolo62.py と同一 (IoU>=0.5 の貪欲マッチング、既定は val 7ファイル)。
 # 分類器が "?" と棄権した箱は、位置ヒット・文字不一致として数え、
 # 位置ヒット中を 正解 / ? / 誤読 に分けて出す。
+# --sweep を付けると、CSV に残っている分類器の信頼度から、閾値を変えた場合の
+# 正解 / ? / 誤読 を再計算して一覧する (推論のやり直しは不要)。
+# ただし CSV 作成時の閾値 (既定 0.5) 未満には下げられない。
 # 使い方:
 #   python src/score_full.py --csv /workspace/data/predict_full_eval/predictions.csv \
 #       --images /workspace/data/labelme/images
@@ -51,14 +54,15 @@ def load_gt(json_path):
   return gts
 
 
-# predictions.csv を画像ごとに (箱, 予測文字) の一覧へまとめる
+# predictions.csv を画像ごとに (箱, 予測文字, 分類器の信頼度) の一覧へまとめる
 def load_preds(csv_path):
   by_image = {}
   with open(csv_path, newline='', encoding='utf-8') as f:
     for row in csv.DictReader(f):
       box = (float(row['x1']), float(row['y1']),
              float(row['x2']), float(row['y2']))
-      by_image.setdefault(Path(row['image']).stem, []).append((box, row['pred']))
+      by_image.setdefault(Path(row['image']).stem, []).append(
+        (box, row['pred'], float(row['conf'])))
   return by_image
 
 
@@ -66,8 +70,8 @@ def load_preds(csv_path):
 def match(gts, preds):
   cand = []
   for gi, (_, gb) in enumerate(gts):
-    for pi, (pb, _) in enumerate(preds):
-      v = iou(gb, pb)
+    for pi, p in enumerate(preds):
+      v = iou(gb, p[0])
       if v >= IOU_TH:
         cand.append((v, gi, pi))
   cand.sort(reverse=True)
@@ -96,6 +100,8 @@ def main():
                       help='labelme のフォルダ (json と画像)')
   parser.add_argument('--all', action='store_true',
                       help='val だけでなく全ファイルを対象にする')
+  parser.add_argument('--sweep', action='store_true',
+                      help='分類器の信頼度閾値を変えた場合の内訳も一覧する')
   args = parser.parse_args()
 
   preds_by_image = load_preds(args.csv)
@@ -112,6 +118,7 @@ def main():
   band_total = Counter()
   band_exact = Counter()
   confuse = Counter()
+  hit_rows = []
   file_lines = []
   for jp in jsons:
     gts = load_gt(jp)
@@ -124,6 +131,7 @@ def main():
     for gi, pi in pairs:
       label, gb = gts[gi]
       pred = preds[pi][1]
+      hit_rows.append((label, pred, preds[pi][2]))
       if pred == label:
         exact += 1
         f_exact += 1
@@ -154,6 +162,17 @@ def main():
   print('--- 混同ペア (正解 -> 予測, 位置ヒット分, ? を除く) ---')
   for (t, p), c in confuse.most_common(10):
     print(f'{t} -> {p}: {c}')
+
+  if args.sweep:
+    print('--- 分類器の閾値スイープ (位置ヒット中の内訳) ---')
+    for th in (0.5, 0.6, 0.7, 0.8, 0.9, 0.95):
+      s_exact = sum(1 for l, p, c in hit_rows if p == l and c >= th)
+      s_wrong = sum(1 for l, p, c in hit_rows
+                    if p != '?' and p != l and c >= th)
+      s_unknown = pos - s_exact - s_wrong
+      print(f'閾値 {th:.2f}: 正解 {s_exact}, ? {s_unknown}, 誤読 {s_wrong} '
+            f'(完全一致率 {s_exact / total:.4f})' if total else
+            f'閾値 {th:.2f}: 正解 {s_exact}, ? {s_unknown}, 誤読 {s_wrong}')
 
 
 if __name__ == '__main__':
